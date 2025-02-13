@@ -1,0 +1,33 @@
+* {
+    box-sizing: border-box;
+}
+
+#form-designer {
+    display: flex;
+    flex-direction: column;
+
+    background-color: black;
+}
+
+#form-controls {
+    display: flex;
+    gap: 0.25rem;
+}
+
+input,
+button {
+    font-size: 1rem;
+}
+
+.btn {
+    background-color: hsl(0, 0%, 90%);
+    border: 1px solid hsl(0, 0%, 70%);
+    border-radius: 0.3em;
+    outline: none;
+    cursor: pointer;
+    padding: 0.5em 1em;
+}
+
+.btn.btn-small {
+    font-size: 0.75rem;
+}
