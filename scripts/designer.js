@@ -1,58 +1,53 @@
 const formDesigner = document.getElementById("form-designer")
 
+let counter = 0;
+
 function addChoice() {
     // Generate a random id for radio button group
     const id = crypto.randomUUID();
+    counter++;
 
-    // Create the builder
-    let choiceBuilder = document.createElement("div");
-    choiceBuilder.className = "builder";
-    choiceBuilder.id = id;
+    const choice = document.createElement("div");
+    choice.innerHTML = `
+        <h2>Question ${counter}</h2>
+        <div class="builder">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="${id}" id="${id}">
+                <input class="form-control" type="text" placeholder="Choice 1">
+                <button class="btn btn-danger" onclick="removeOption(this)">Remove</button>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="${id}" id="${id}">
+                <input class="form-control" type="text" placeholder="Choice 2">
+                <button class="btn btn-danger" onclick="removeOption(this)">Remove</button>
+            </div>
+        </div>
+        <button class="btn btn-success" onclick="addOption(this, '${id}')">Add Option</button>
+    `;
 
-    let question = document.createElement("input");
-    question.type = "text";
-
-    // Append the choices to the builder
-    let choiceList = document.createElement("div");
-    choiceList.appendChild(question);
-    choiceList.appendChild(generateChoiceInput(id))
-    choiceList.appendChild(generateChoiceInput(id))
-    choiceBuilder.appendChild(choiceList);
-
-    // Add More Options
-    let btnAddOption = document.createElement("button");
-    btnAddOption.textContent = "Add Option";
-    btnAddOption.className = "btn btn-small";
-    btnAddOption.onclick = () => {
-        choiceList.appendChild(generateChoiceInput(id));
-    }
-    choiceBuilder.appendChild(btnAddOption);
-
-    // Add the builder to the form designer
-    formDesigner.appendChild(choiceBuilder);
+    formDesigner.appendChild(choice);
 }
 
-function generateChoiceInput(name) {
-    let input = document.createElement("div");
-    input.style.display = "flex";
+/**
+ * 
+ * @param {HTMLButtonElement} element 
+ * @param {string} id 
+ */
+function addOption(element, id) {
+    const option = document.createElement("div");
+    option.className = "form-check";
+    option.innerHTML = `
+        <input class="form-check-input" type="radio" name="${id}" id="${id}">
+        <input class="form-control" type="text" placeholder="Choice">
+        <button class="btn btn-danger" onclick="removeOption(this)">Remove</button>
+    `;
+    element.previousElementSibling.appendChild(option);
+}
 
-    let choice = document.createElement("input");
-    choice.type = "radio";
-    choice.name = name;
-    input.appendChild(choice);
-
-    let text = document.createElement("input");
-    text.type = "text";
-    text.placeholder = `Option`;
-    input.appendChild(text);
-
-    let btnRemove = document.createElement("button");
-    btnRemove.textContent = "Remove";
-    btnRemove.className = "btn btn-small";
-    btnRemove.onclick = () => {
-        input.remove();
-    }
-    input.appendChild(btnRemove);
-
-    return input;
+/**
+ * 
+ * @param {HTMLButtonElement} element 
+ */
+function removeOption(element) {
+    element.parentElement.remove();
 }
