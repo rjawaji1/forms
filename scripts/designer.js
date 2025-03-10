@@ -22,7 +22,10 @@ function addChoice() {
                 <button class="btn btn-danger" onclick="removeOption(this)">Remove</button>
             </div>
         </div>
-        <button class="btn btn-success" onclick="addOption(this, '${id}')">Add Option</button>
+        <div>
+            <button class="btn btn-success" onclick="addOption(this, '${id}')">Add Option</button>
+            <button class="btn btn-danger" onclick="this.parentElement.parentElement.remove()">Remove</button>
+        </div>
     `;
 
     formDesigner.appendChild(choice);
@@ -50,4 +53,8 @@ function addOption(element, id) {
  */
 function removeOption(element) {
     element.parentElement.remove();
+}
+
+function test() {
+    XMLHttpRequest();
 }
