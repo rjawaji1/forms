@@ -5,8 +5,8 @@
 <main>
     <form action="authenticate.php" method="post">
         <div>
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username">
+            <label for="username">Email</label>
+            <input type="email" id="email" name="email">
         </div>
         <div>
             <label for="password">Password</label>

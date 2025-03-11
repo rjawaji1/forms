@@ -5,7 +5,6 @@
 
     // Start session
     session_start();
-    $logged_in = isset($_SESSION['user']) != null;
 ?>
 
 <!DOCTYPE html>
@@ -21,14 +20,24 @@
 <body>
 
 <header>
-    <?php if(isset($_SESSION['error'])) : ?>
-        <p><?=$_SESSION['error']?></p>
-        <?php unset($_SESSION['error']) ?>
-    <?php endif; ?>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.php">Forms</a>
+        </div>
 
-    <nav>
-        <?php if($logged_in) : ?>
-            <p>Welcome, <? $_SESSION['user'] ?></p>
+        <?php if(isset($_SESSION['username'])) : ?>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <?=$_SESSION['username']?>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
         <?php else : ?>
             <a href="login.php">Login</a>
         <?php endif; ?>

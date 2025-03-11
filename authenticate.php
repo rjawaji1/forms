@@ -9,16 +9,23 @@ include_once('config/database.php');
 $conn = new mysqli($MYSQL_SERVER, $MYSQL_USER, $MYSQL_PASSWORD, $MYSQL_DB);
 
 // Fetch the username and password from the POST request
-$username = sanitize_input($_POST['username']);
+$email = sanitize_input($_POST['email']);
 $password = sanitize_input($_POST['password']);
 
 // Query the database for the user
-$query = "SELECT id FROM users WHERE email = '$username' AND password = SHA('$password')";
+$query = "SELECT id, username FROM users WHERE email = '$email' AND password = SHA('$password')";
 $result = $conn->query($query);
 
 session_start();
 if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+
+    $user_id = $row['id'];
+    $_SESSION['user_id'] = $user_id;
+
+    $username = $row['username'];
     $_SESSION['username'] = $username;
+    
     header('Location: forms.php');
 } else {
     $_SESSION['error'] = 'Invalid username or password';
