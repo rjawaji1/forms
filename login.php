@@ -5,7 +5,7 @@
 <main>
     <form action="authenticate.php" method="post">
         <div>
-            <label for="username">Email</label>
+            <label for="email">Email</label>
             <input type="email" id="email" name="email">
         </div>
         <div>
