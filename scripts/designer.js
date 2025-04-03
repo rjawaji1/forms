@@ -1,60 +1,38 @@
-const formDesigner = document.getElementById("form-designer")
+$(document).ready(function(){
+  
+  // Form Controls Selectors
+  $("[id^=create_]").click(function(){
+    let buttonID = $(this).attr("id");
+    let questionType = buttonID.replace("create_", "");
+    let searchParams = new URLSearchParams(window.location.search);
+    let formID = parseInt(searchParams.get("id"));
 
-let counter = 0;
+    if (!formID) return;
 
-function addChoice() {
-    // Generate a random id for radio button group
-    const id = crypto.randomUUID();
-    counter++;
 
-    const choice = document.createElement("div");
-    choice.innerHTML = `
-        <h2>Question ${counter}</h2>
-        <div class="builder">
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="${id}" id="${id}">
-                <input class="form-control" type="text" placeholder="Choice 1">
-                <button class="btn btn-danger" onclick="removeOption(this)">Remove</button>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="${id}" id="${id}">
-                <input class="form-control" type="text" placeholder="Choice 2">
-                <button class="btn btn-danger" onclick="removeOption(this)">Remove</button>
-            </div>
-        </div>
-        <div>
-            <button class="btn btn-success" onclick="addOption(this, '${id}')">Add Option</button>
-            <button class="btn btn-danger" onclick="this.parentElement.parentElement.remove()">Remove</button>
-        </div>
-    `;
+    $.ajax({
+      type: "post",
+      url: "api/form/question/create.php",
+      data: {form_id: formID, type: questionType},
+      success: (result) => $("#form-designer").append(result),
+    });  
+  });
 
-    formDesigner.appendChild(choice);
-}
 
-/**
- * 
- * @param {HTMLButtonElement} element 
- * @param {string} id 
- */
-function addOption(element, id) {
-    const option = document.createElement("div");
-    option.className = "form-check";
-    option.innerHTML = `
-        <input class="form-check-input" type="radio" name="${id}" id="${id}">
-        <input class="form-control" type="text" placeholder="Choice">
-        <button class="btn btn-danger" onclick="removeOption(this)">Remove</button>
-    `;
-    element.previousElementSibling.appendChild(option);
-}
+  // Multiple Choice Selectors
+  $(".question-controls button[data-action='add-option']").click(function(){
+    let searchParams = new URLSearchParams(window.location.search);
+    let formID = parseInt(searchParams.get("id"));
 
-/**
- * 
- * @param {HTMLButtonElement} element 
- */
-function removeOption(element) {
-    element.parentElement.remove();
-}
-
-function test() {
-    XMLHttpRequest();
-}
+    let question = $(this).closest("data-question-id");
+    let questionID = question.dataset["data-question-id"];
+    console.log(questionID);
+    
+    $.ajax({
+      type: "post",
+      url: "api/form/question/options/multiple_choice/add",
+      data: {form_id: formID, question_id: questionID},
+      success: (result) => $(this).closest(".question-choices").append(result),
+    })
+  })
+});

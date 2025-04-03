@@ -3,50 +3,45 @@ CREATE TABLE IF NOT EXISTS users
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
-    username VARCHAR(255) NOT NULL,
-
-    created_at DATETIME NOT NULL DEFAULT NOW(),
-    updated_at DATETIME NOT NULL DEFAULT NOW()
+    username VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS forms
 (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
     name VARCHAR(255) NOT NULL,
-    user_id INT NOT NULL,
-    questions INT NOT NULL DEFAULT 0,
-
-    FOREIGN KEY (user_id) REFERENCES users (id),
-
-    created_at DATETIME NOT NULL DEFAULT NOW(),
-    updated_at DATETIME NOT NULL DEFAULT NOW()
+    questions INT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE questions
 (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    form_id INT NOT NULL REFERENCES forms (id) ON DELETE CASCADE ,
     question TEXT NOT NULL,
-    form_id INT NOT NULL,
     position INT NOT NULL,
     type VARCHAR(25) NOT NULL,
+    required BOOLEAN NOT NULL NOT NULL DEFAULT FALSE
+);
 
-    FOREIGN KEY (form_id) REFERENCES forms (id),
+CREATE TABLE text_questions
+(
+    id INT PRIMARY KEY REFERENCES questions (id) ON DELETE CASCADE,
+    long_answer BOOLEAN DEFAULT FALSE
+);
 
-    created_at DATETIME NOT NULL DEFAULT NOW(),
-    updated_at DATETIME NOT NULL DEFAULT NOW()
+CREATE TABLE multiple_choice_questions
+(
+    id INT PRIMARY KEY REFERENCES questions(id) ON DELETE CASCADE,
+    multiple BOOLEAN NOT NULL DEFAULT TRUE,
+    choices INT NOT NULL DEFAULT 2,
+    max_choices INT
 );
 
 CREATE TABLE multiple_choice_choices
 (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY REFERENCES questions(id),
     question_id INT NOT NULL,
     description TEXT NOT NULL,
-    position INT NOT NULL,
-
-    FOREIGN KEY (question_id) REFERENCES questions(id),
-
-    created_at DATETIME NOT NULL DEFAULT NOW(),
-    updated_at DATETIME NOT NULL DEFAULT NOW()
+    position    INT NOT NULL
 );
-
-UPDATE forms SET questions = questions + 1 WHERE id = ?

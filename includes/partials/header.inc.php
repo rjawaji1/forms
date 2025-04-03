@@ -6,7 +6,6 @@ ini_set('display_errors', 'On');
 // Start session
 session_start();
 ?>
-
 <!DOCTYPE html>
 <html>
 

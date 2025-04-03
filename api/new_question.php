@@ -20,17 +20,11 @@ $stmt -> close();
 $question_form_position = (int)$question_form_position + 1;
 $question_text = "Question $question_form_position";
 
-
-// Insert questions
-$stmt = $conn -> prepare("INSERT INTO questions (question, form_id, position, type) VALUES (?,?,?,?)");
-$stmt -> bind_param("siis", $question_text, $question_form_id, $question_form_position, $question_type);
-if($stmt -> execute()){
-   $conn -> execute_query("UPDATE forms SET questions = questions + 1 WHERE id = $question_form_id");
-}
-
-// Close the statement
-$stmt -> close();
-
+// Insert Question
+$conn -> begin_transaction();
+$conn -> execute_query("INSERT INTO questions (question, form_id, position, type) VALUES (?,?,?,?)", [$question_text, $question_form_id, $question_form_position, $question_type]);
+$conn -> execute_query("UPDATE forms SET questions = questions + 1, updated_at = NOW()  WHERE id = ?", [$question_form_id]);
+$conn -> commit();
 
 // Redirect the user to the original page
 header("Location: ../form.php?id=$question_form_id");
