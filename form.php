@@ -59,19 +59,19 @@ $stmt -> bind_result($question_id, $question, $question_position, $question_type
                 <div class="question-body">
                     <?php switch($question_type): case "multiple_choice" :?>
                         <?php
-                        $choice_stmt = $conn -> prepare("SELECT id, description, position FROM multiple_choice_choices WHERE question_id = ? ");
+                        $choice_stmt = $conn -> prepare("SELECT id, description, position FROM multiple_choice_choices WHERE question_id = ? ORDER BY position ASC");
                         $choice_stmt -> bind_param("i", $question_id);
                         $choice_stmt -> execute();
                         $choice_stmt -> bind_result($choice_id, $choice_description, $choice_position);
                         ?>
                         <?php while($choice_stmt -> fetch()) :?>
-                            <div data-choice-id="<?=$choice_id?>">
-                                <input type="<?= $result["multiple"] ? "checkbox" : "radio"?>" name="<?=$question_id?>" id="<?=$choice_id?>">
-                                <label for="<?=$choice_id?>"><?=$choice_description?></label>
+                            <div data-choice-id="<?=$choice_id?>" data-choice-position="<?=$choice_position?>">
+                                <input type="<?=$result["multiple"] ? "checkbox" : "radio"?>" name="<?=$question_id?>" id="<?=$choice_id?>">
+                                <input value="<?=$choice_description?>">
                                 <div>
-                                    <button data-action="delete">⨯</button>
-                                    <button data-action="move_up">↑</button>
-                                    <button data-action="move_down">↓</button>
+                                    <button data-action="mco_delete">⨯</button>
+                                    <button data-action="mco_move_up">↑</button>
+                                    <button data-action="mco_move_down">↓</button>
                                 </div>
                             </div>
                         <?php endwhile; ?>
@@ -87,7 +87,7 @@ $stmt -> bind_result($question_id, $question, $question_position, $question_type
                 
                 <div class="question-controls">
                     <?php switch($question_type): case "multiple_choice" :?>
-                        <button data-action="add_option">Add Option</button>
+                        <button data-action="mcq_add_option">Add Option</button>
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" role="switch" id="<?=$question_id?>-multiple" <?=$result["multiple"] ? "checked" : "" ?>>
                             <label class="form-check-label" for="<?=$question_id?>-multiple">Multiple Answers</label>

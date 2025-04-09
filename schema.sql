@@ -33,15 +33,15 @@ CREATE TABLE text_questions
 CREATE TABLE multiple_choice_questions
 (
     id INT PRIMARY KEY REFERENCES questions(id) ON DELETE CASCADE,
-    multiple BOOLEAN NOT NULL DEFAULT TRUE,
+    multiple BOOLEAN NOT NULL DEFAULT FALSE,
     choices INT NOT NULL DEFAULT 2,
     max_choices INT
 );
 
 CREATE TABLE multiple_choice_choices
 (
-    id INT AUTO_INCREMENT PRIMARY KEY REFERENCES questions(id),
-    question_id INT NOT NULL,
+    id INT AUTO_INCREMENT PRIMARY KEY ,
+    question_id INT NOT NULL REFERENCES questions(id) ON DELETE CASCADE ,
     description TEXT NOT NULL,
     position    INT NOT NULL
 );

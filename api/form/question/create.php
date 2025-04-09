@@ -70,8 +70,8 @@ try {
 
         <div class="question-body">
             <?php switch($question_type): case "multiple_choice" :?>
-                <div data-choice-id="<?=$choice_one_id?>">
-                    <input type="radio" name="<?=$question_id?>" id="<?=$choice_one_id?>" >
+                <div data-choice-id="<?=$choice_one_id?>" data-choice-position="1">
+                    <input type="radio" name="<?=$question_id?>" id="<?=$choice_one_id?>">
                     <label for="<?=$choice_one_id?>">Choice 1</label>
                     <div>
                         <button data-action="delete">⨯</button>
@@ -79,7 +79,7 @@ try {
                         <button data-action="move_down">↓</button>
                     <div>
                 </div>
-                <div data-choice-id="<?=$choice_two_id?>">
+                <div data-choice-id="<?=$choice_two_id?>" data-choice-position="2">
                     <input type="radio" name="<?=$question_id?>" id="<?=$choice_two_id?>" >
                     <label for="<?=$choice_two_id?>">Choice 2</label>
                     <div>
@@ -95,7 +95,7 @@ try {
 
         <div class="question-controls">
             <?php switch($question_type): case "multiple_choice" :?>
-                <button data-action="add_option">Add Option</button>
+                <button data-action="mcq_add_option">Add Option</button>
                 <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" role="switch" id="<?=$question_id?>-multiple">
                     <label class="form-check-label" for="<?=$question_id?>-multiple">Multiple Answers</label>
