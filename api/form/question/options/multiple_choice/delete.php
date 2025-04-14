@@ -1,8 +1,8 @@
 <?php
 include_once("../../../../../config/database.php");
 
-$choice_id = $_POST['choice_id'];
 $question_id = $_POST['question_id'];
+$choice_id = $_POST['choice_id'];
 
 $conn -> begin_transaction();
 
@@ -17,10 +17,10 @@ try {
         [$choice_id]
     ) -> fetch_assoc();
 
-    $position = (int)$result["position"];
+    $position = $result["position"];
 
     $conn -> execute_query(
-        "UPDATE multiple_choice_choices SET position = position - 1 WHERE question_id = ? AND postion > ?",
+        "UPDATE multiple_choice_choices SET position = position - 1 WHERE question_id = ? AND position > ?",
         [$question_id, $position]  
     );
 

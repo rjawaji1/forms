@@ -9,8 +9,9 @@ $result = $conn -> execute_query(
     [$question_id]
 ) -> fetch_assoc();
 
-$choice_count = (int)$result["choices"] + 1;
-$choice_text = "Choice $choice_count";
+$mco_pos = (int)$result["choices"] + 1;
+$mco_text = "Choice $mco_pos";
+$mco_type = $result["multiple"];
 
 $conn -> begin_transaction();
 
@@ -22,28 +23,22 @@ try {
 
     $conn -> execute_query(
         "INSERT INTO multiple_choice_choices(question_id, description, position) VALUES (?,?,?)",
-        [$question_id, $choice_text, $choice_count]
+        [$question_id, $mco_text, $mco_pos]
     );
 
-    $choice_id = $conn -> insert_id;
+    $mco_id = $conn -> insert_id;
 
     $conn -> commit();
-    ?>
 
-    <div data-choice-id="<?=$choice_id?>" data-choice-position="<?=$choice_count?>">
-        <input type="<?=$result["multiple"] ? "checkbox" : "radio"?>" name="<?=$question_id?>" id="<?=$choice_id?>">
-        <input value="<?=$choice_text?>">
-        <div>
-            <button data-action="mco_delete">x</button>
-            <button data-action="mco_move_up">↑</button>
-            <button data-action="mco_move_down">↓</button>
-        </div>
-    </div>
-
-    <?php
+    include("../../../../../includes/components/multiple_choice_question_component.php");
 } catch(mysqli_sql_exception $e){
     $conn -> rollback();
-    http_response_code(500);
+    
+    header("HTTP/1.1 500 Database Error " . $e->getMessage());
+    die();
+} catch(Exception $e) {
+    $conn -> rollback();
+    header("HTTP/1.1 500 Unknown Error " . $e->getMessage());
     die();
 }
 ?>

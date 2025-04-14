@@ -52,8 +52,14 @@ $stmt -> bind_result($question_id, $question, $question_position, $question_type
                 }
                 ?>
 
+                <div class="question-controls">
+                    <button class="btn" data-action="q_delete"><i class="bi bi-x"></i></button>
+                    <button class="btn" data-action="q_move_up"><i class="bi bi-arrow-up-short"></i></button>
+                    <button class="btn" data-action="q_move_down"><i class="bi bi-arrow-down-short"></i></button>
+                </div>
+
                 <div class="question-header">
-                    <input name="question" value="<?=$question?>">
+                    <input class="form-control" name="question" value="<?=$question?>">
                 </div>
 
                 <div class="question-body">
@@ -62,32 +68,26 @@ $stmt -> bind_result($question_id, $question, $question_position, $question_type
                         $choice_stmt = $conn -> prepare("SELECT id, description, position FROM multiple_choice_choices WHERE question_id = ? ORDER BY position ASC");
                         $choice_stmt -> bind_param("i", $question_id);
                         $choice_stmt -> execute();
-                        $choice_stmt -> bind_result($choice_id, $choice_description, $choice_position);
+                        $choice_stmt -> bind_result($mco_id, $mco_text, $mco_pos);
+                        $mco_type = $result["multiple"];
+
+                        while($choice_stmt -> fetch()){
+                            include("includes/components/multiple_choice_question_component.php");
+                        }
+                        $choice_stmt -> close();
                         ?>
-                        <?php while($choice_stmt -> fetch()) :?>
-                            <div data-choice-id="<?=$choice_id?>" data-choice-position="<?=$choice_position?>">
-                                <input type="<?=$result["multiple"] ? "checkbox" : "radio"?>" name="<?=$question_id?>" id="<?=$choice_id?>">
-                                <input value="<?=$choice_description?>">
-                                <div>
-                                    <button data-action="mco_delete">⨯</button>
-                                    <button data-action="mco_move_up">↑</button>
-                                    <button data-action="mco_move_down">↓</button>
-                                </div>
-                            </div>
-                        <?php endwhile; ?>
-                        <?php $choice_stmt -> close(); ?>
                     <?php break; case "text" :?>
                         <?php if($result["long_answer"]) :?>
-                            <textarea disabled></textarea>
+                            <textarea class="form-control" disabled></textarea>
                         <?php else: ?>
-                            <input type="text" disabled>
+                            <input class="form-control" type="text" disabled>
                         <?php endif; ?>
                     <?php endswitch; ?>
                 </div>
                 
                 <div class="question-controls">
                     <?php switch($question_type): case "multiple_choice" :?>
-                        <button data-action="mcq_add_option">Add Option</button>
+                        <button class="btn me-auto" data-action="mcq_add_option">Add Option</button>
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" role="switch" id="<?=$question_id?>-multiple" <?=$result["multiple"] ? "checked" : "" ?>>
                             <label class="form-check-label" for="<?=$question_id?>-multiple">Multiple Answers</label>
@@ -97,7 +97,7 @@ $stmt -> bind_result($question_id, $question, $question_position, $question_type
                             <label class="form-check-label" for="<?=$question_id?>-required">Required</label>
                         </div>
                     <?php break; case "text" :?>
-                        <div class="form-check form-switch">
+                        <div class="form-check form-switch ms-auto">
                             <input class="form-check-input" type="checkbox" role="switch" id="<?=$question_id?>-long" <?=$result["long_answer"] ? "checked" : "" ?>>
                             <label class="form-check-label" for="<?=$question_id?>-long">Long Answer</label>
                         </div>

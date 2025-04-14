@@ -4,15 +4,14 @@ include_once("../../../config/database.php");
 $form_id = $_POST["form_id"];
 $question_type = $_POST["type"];
 
-$stmt = $conn -> prepare("SELECT questions FROM forms WHERE id = ?");
-$stmt -> bind_param("i", $form_id);
-$stmt -> execute();
-$stmt -> bind_result($question_count);
-$stmt -> fetch();
-$stmt -> close();
+$result = $conn -> execute_query(
+    "SELECT questions FROM forms WHERE id = ?",
+    [$form_id]
+) -> fetch_assoc();
 
-$question_position = (int)$question_count + 1;
-$question = "Question $question_position";
+
+$question_position = (int)$result["questions"] + 1;
+$question_text = "Question";
 
 $conn -> begin_transaction();
 
@@ -24,7 +23,7 @@ try {
 
     $conn -> execute_query(
         "INSERT INTO questions (form_id, question, position, type) VALUES (?,?,?,?)",
-        [$form_id, $question, $question_position, $question_type]
+        [$form_id, $question_text, $question_position, $question_type]
     );
 
     $question_id = $conn -> insert_id;
@@ -65,29 +64,24 @@ try {
 
     <div class="question" data-question-id="<?=$question_id?>" data-question-position="<?=$question_position?>">
         <div class="question-header">
-            <input name="question" value="<?=$question?>">
+            <input name="question" value="<?=$question_text?>">
         </div>
 
         <div class="question-body">
             <?php switch($question_type): case "multiple_choice" :?>
-                <div data-choice-id="<?=$choice_one_id?>" data-choice-position="1">
-                    <input type="radio" name="<?=$question_id?>" id="<?=$choice_one_id?>">
-                    <label for="<?=$choice_one_id?>">Choice 1</label>
-                    <div>
-                        <button data-action="delete">⨯</button>
-                        <button data-action="move_up">↑</button>
-                        <button data-action="move_down">↓</button>
-                    <div>
-                </div>
-                <div data-choice-id="<?=$choice_two_id?>" data-choice-position="2">
-                    <input type="radio" name="<?=$question_id?>" id="<?=$choice_two_id?>" >
-                    <label for="<?=$choice_two_id?>">Choice 2</label>
-                    <div>
-                        <button data-action="delete">⨯</button>
-                        <button data-action="move_up">↑</button>
-                        <button data-action="move_down">↓</button>
-                    <div>
-                </div>
+                <?php
+                $mco_type = false;
+
+                $mco_id = $choice_one_id;
+                $mco_text = "Choice 1";
+                $mco_pos = 1;
+                include("../../../includes/components/multiple_choice_question_component.php");
+
+                $mco_id = $choice_two_id;
+                $mco_text = "Choice 2";
+                $mco_pos = 2;
+                include("../../../includes/components/multiple_choice_question_component.php");
+                ?>
             <?php break; case "text" :?>
                 <input type="text" disabled>
             <?php endswitch; ?>
@@ -120,7 +114,12 @@ try {
     <?php
 } catch(mysqli_sql_exception $exception){
     $conn -> rollback();
-    http_response_code(500);
+    header("HTTP/1.1 500 Database Error " . $e->getMessage());
+    die();
+} catch(Exception $e) {
+    $conn -> rollback();
+    header("HTTP/1.1 500 Unknown Error " . $e->getMessage());
+    die();
 }
 ?>
 
