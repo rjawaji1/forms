@@ -1,5 +1,5 @@
 <?php
-include_once('config/database.php');
+include_once('includes/database.php');
 include_once('includes/util.inc.php');
 
 // Fetch the username and password from the POST request

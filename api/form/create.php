@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-include_once("../../config/database.php");
+include_once("../../includes/database.php");
 
 $user_id = $_SESSION["user_id"];
 $form_name = $_POST["form_name"];

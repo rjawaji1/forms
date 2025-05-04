@@ -1,5 +1,5 @@
 <?php
-include_once("../../../../../config/database.php");
+include_once("../../../../../includes/database.php");
 
 $form_id = $_POST['form_id'];
 $question_id = $_POST['question_id'];

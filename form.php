@@ -1,7 +1,7 @@
 <?php
 require_once('includes/partials/header.inc.php');
 require_once('includes/util.inc.php');
-require_once('config/database.php');
+require_once('includes/database.php');
 
 if(!isset($_GET["id"])){
    header("Location: forms.php"); 
