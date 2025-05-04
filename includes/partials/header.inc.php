@@ -24,7 +24,7 @@ session_start();
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="index.php">Forms</a>
+            <a class="navbar-brand" href="<?php echo(isset($_SESSION['user_id']) ? 'forms.php' : 'index.php');?>">Forms</a>
         </div>
 
         <?php if(isset($_SESSION['username'])) : ?>

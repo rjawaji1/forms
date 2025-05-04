@@ -20,8 +20,10 @@ $stmt -> bind_result($form_id, $form_name)
             <?php endwhile; ?>
         </div>
     </div>
-    <form>
-
+    <form action="api/form/create.php" method="POST">
+        <label for="form_name">Form Name: </label>
+        <input class="form-control" id="form_name" name="form_name">
+        <input type="submit" value="Create Form">
     </form>
 </main>
 

@@ -30,7 +30,7 @@ try {
 
     $conn -> commit();
 
-    include("../../../../../includes/components/multiple_choice_question_component.php");
+    include("../../../../../includes/components/mcq_component.php");
 } catch(mysqli_sql_exception $e){
     $conn -> rollback();
     

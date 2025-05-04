@@ -75,21 +75,21 @@ try {
                 $mco_id = $choice_one_id;
                 $mco_text = "Choice 1";
                 $mco_pos = 1;
-                include("../../../includes/components/multiple_choice_question_component.php");
+                include("../../../includes/components/mcq_component.php");
 
                 $mco_id = $choice_two_id;
                 $mco_text = "Choice 2";
                 $mco_pos = 2;
-                include("../../../includes/components/multiple_choice_question_component.php");
+                include("../../../includes/components/mcq_component.php");
                 ?>
             <?php break; case "text" :?>
-                <input type="text" disabled>
+                <input class="form-controls" type="text" disabled>
             <?php endswitch; ?>
         </div>
 
         <div class="question-controls">
             <?php switch($question_type): case "multiple_choice" :?>
-                <button data-action="mcq_add_option">Add Option</button>
+                <button class="btn" data-action="mcq_add_option">Add Option</button>
                 <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" role="switch" id="<?=$question_id?>-multiple">
                     <label class="form-check-label" for="<?=$question_id?>-multiple">Multiple Answers</label>

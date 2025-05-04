@@ -72,7 +72,7 @@ $stmt -> bind_result($question_id, $question, $question_position, $question_type
                         $mco_type = $result["multiple"];
 
                         while($choice_stmt -> fetch()){
-                            include("includes/components/multiple_choice_question_component.php");
+                            include("includes/components/mcq_component.php");
                         }
                         $choice_stmt -> close();
                         ?>
