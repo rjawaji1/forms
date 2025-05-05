@@ -53,9 +53,9 @@ $stmt -> bind_result($question_id, $question, $question_position, $question_type
                 ?>
 
                 <div class="question-controls">
-                    <button class="btn" data-action="q_delete"><i class="bi bi-x"></i></button>
-                    <button class="btn" data-action="q_move_up"><i class="bi bi-arrow-up-short"></i></button>
-                    <button class="btn" data-action="q_move_down"><i class="bi bi-arrow-down-short"></i></button>
+                    <button class="btn btn-danger" data-action="q_delete"><i class="bi bi-x"></i></button>
+                    <button class="btn btn-accent" data-action="q_move_up"><i class="bi bi-arrow-up-short"></i></button>
+                    <button class="btn btn-accent" data-action="q_move_down"><i class="bi bi-arrow-down-short"></i></button>
                 </div>
 
                 <div class="question-header">
@@ -77,36 +77,16 @@ $stmt -> bind_result($question_id, $question, $question_position, $question_type
                         $choice_stmt -> close();
                         ?>
                     <?php break; case "text" :?>
-                        <?php if($result["long_answer"]) :?>
-                            <textarea class="form-control" disabled></textarea>
-                        <?php else: ?>
-                            <input class="form-control" type="text" disabled>
-                        <?php endif; ?>
+                        <?php
+                        $text_long_answer = $result["long_answer"];
+                        include("includes/components/text_component.php");
+                        ?>
                     <?php endswitch; ?>
                 </div>
                 
-                <div class="question-controls">
-                    <?php switch($question_type): case "multiple_choice" :?>
-                        <button class="btn me-auto" data-action="mcq_add_option">Add Option</button>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch" id="<?=$question_id?>-multiple" <?=$result["multiple"] ? "checked" : "" ?>>
-                            <label class="form-check-label" for="<?=$question_id?>-multiple">Multiple Answers</label>
-                        </div>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch" id="<?=$question_id?>-required" <?=$question_required ? "checked" : "" ?>>
-                            <label class="form-check-label" for="<?=$question_id?>-required">Required</label>
-                        </div>
-                    <?php break; case "text" :?>
-                        <div class="form-check form-switch ms-auto">
-                            <input class="form-check-input" type="checkbox" role="switch" id="<?=$question_id?>-long" <?=$result["long_answer"] ? "checked" : "" ?>>
-                            <label class="form-check-label" for="<?=$question_id?>-long">Long Answer</label>
-                        </div>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch" id="<?=$question_id?>-required" <?=$question_required ? "checked" : "" ?>>
-                            <label class="form-check-label" for="<?=$question_id?>-required" >Required</label>
-                        </div>
-                    <?php endswitch; ?>
-                </div>
+                <?php
+                include("includes/components/q_controls_component.php");
+                ?>
             </div>
         <?php endwhile; ?>
     </div>
