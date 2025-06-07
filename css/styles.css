@@ -119,3 +119,12 @@
 .btn.btn-pill {
   border-radius: 999999px;
 }
+
+/** Card Styles */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1em;
+  box-shadow: 0 0 5px 0 var(--card-foreground);
+}

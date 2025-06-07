@@ -1,7 +1,7 @@
-$(function() {
+$(function () {
 
   // Form Controls Selectors
-  $("[id^=create_]").on("click", function() {
+  $("[id^=create_]").on("click", function () {
     let buttonID = $(this).attr("id");
     let questionType = buttonID.replace("create_", "");
     let searchParams = new URLSearchParams(window.location.search);
@@ -19,7 +19,7 @@ $(function() {
   });
 
   // Handle Multiple Choice Actions
-  $("button[data-action^='mco_']").on("click", function() {
+  $("button[data-action^='mco_']").on("click", function () {
     let action = $(this)
       .attr("data-action")
       .replace("mco_", "");
@@ -48,7 +48,7 @@ $(function() {
       method: "POST",
       url: "api/form/question/options/multiple_choice/edit.php",
       data: { question_id: questionID, choice_id: currentChoiceID, action: action },
-      success: function() {
+      success: function () {
 
         if (action == "move_up") {
           let nextChoiceElement = $(currentChoiceElement)
@@ -80,7 +80,7 @@ $(function() {
     });
   });
 
-  $("button[data-action^='q_']").on("click", function() {
+  $("button[data-action^='q_']").on("click", function () {
     let searchParams = new URLSearchParams(window.location.search);
     let formID = parseInt(searchParams.get("id"));
 
@@ -145,7 +145,7 @@ $(function() {
 
   });
 
-  $("button[data-action^='mcq_']").on("click", function() {
+  $("button[data-action^='mcq_']").on("click", function () {
     console.log("clicked");
     let searchParams = new URLSearchParams(window.location.search);
     let formID = parseInt(searchParams.get("id"));
@@ -170,7 +170,7 @@ $(function() {
     });
   });
 
-  $(".question-controls input[type='checkbox']").on("change", function() {
+  $(".question-controls input[type='checkbox']").on("change", function () {
     console.log("clicked");
     let searchParams = new URLSearchParams(window.location.search);
     let formID = parseInt(searchParams.get("id"));
@@ -185,45 +185,11 @@ $(function() {
       method: "POST",
       url: "api/form/question/options/multiple_choice/edit.php",
       data: { form_id: formID, question_id: questionID, action: "edit_options", role: checkboxRole },
-      success: function() {
-        switch (checkboxRole) {
-          case "long": {
-            let body = checkBox
-              .closest(".question-controls")
-              .siblings(".question-body");
-
-            body.empty();
-
-            if (checkBox.prop("checked")) {
-              let textArea = document.createElement("textarea");
-              textArea.disabled = true;
-              textArea.className = "form-control"
-
-              body.append(textArea);
-            } else {
-              let input = document.createElement("input");
-              input.disabled = true;
-              input.className = "form-control";
-
-              body.append(input);
-            }
-            break;
-          }
-          case "multiple": {
-            checkBox
-              .closest(".question-controls")
-              .siblings(".question-body")
-              .children()
-              .children("input[type]")
-              .prop("type", checkBox.prop("checked") ? "checkbox" : "radio");
-          }
-        }
-      },
       error: handleError,
     });
   });
 
-  $(".question-header input").on("change", function() {
+  $(".question-header input").on("change", function () {
     let questionID = parseInt($(this)
       .closest("div[data-question-id]")
       .attr("data-question-id"));
@@ -233,22 +199,22 @@ $(function() {
     $.ajax({
       method: "POST",
       url: "api/form/question/edit.php",
-      data: {question_id: questionID, action: "update_header", value: newValue},
+      data: { question_id: questionID, action: "update_header", value: newValue },
       error: handleError
     })
   })
 
-  $("div[data-choice-id] input[type='text']").on("change", function(){
+  $("div[data-choice-id] input[type='text']").on("change", function () {
     let choiceID = parseInt($(this)
       .closest("div[data-choice-id]")
-      .attr("data-choice-id"));  
+      .attr("data-choice-id"));
 
     let newValue = $(this).prop("value");
 
     $.ajax({
       method: "POST",
       url: "api/form/question/options/multiple_choice/edit.php",
-      data: {choice_id: choiceID, action: "update_choice_text", value: newValue},
+      data: { choice_id: choiceID, action: "update_choice_text", value: newValue },
       error: handleError
     });
   });

@@ -1,6 +1,6 @@
 <div class="question-controls">
     <?php switch($question_type): case "multiple_choice" :?>
-        <button class="btn" data-action="mcq_add_option">Add Option</button>
+        <button class="btn btn-primary" data-action="mcq_add_option">Add Option</button>
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" role="switch" id="<?=$question_id?>-multiple">
             <label class="form-check-label" for="<?=$question_id?>-multiple">Multiple Answers</label>
